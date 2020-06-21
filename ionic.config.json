@@ -1,0 +1,7 @@
+{
+  "name": "minijuegosjs-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
