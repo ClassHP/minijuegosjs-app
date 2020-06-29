@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Timbiriche</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="init()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <h1>
+    <ion-icon name="caret-forward" *ngIf="player == 1"></ion-icon>
+    <ion-text color="dark">P1 </ion-text>
+    <ion-text color="secondary">{{score[0]}}</ion-text>
+    <ion-text color="dark"> - </ion-text>    
+    <ion-text color="danger">{{score[1]}}</ion-text>
+    <ion-text color="dark"> P2</ion-text>
+    <ion-icon name="caret-back" *ngIf="player == 2"></ion-icon>
+  </h1>
+  <table>
+    <tr *ngFor="let row of table">
+      <ng-container *ngFor="let cell of row">
+        <td [ngClass]="{
+        'cell-player-1': cell.player == 1, 
+        'cell-player-2': cell.player == 2, 
+        'border-top-1': cell.top == 1 || cell.over.top == 1, 
+        'border-right-1': cell.right == 1 || cell.over.right == 1, 
+        'border-bottom-1': cell.bottom == 1 || cell.over.bottom == 1, 
+        'border-left-1': cell.left == 1 || cell.over.left == 1,
+        'border-top-2': cell.top == 2 || cell.over.top == 2, 
+        'border-right-2': cell.right == 2 || cell.over.right == 2, 
+        'border-bottom-2': cell.bottom == 2 || cell.over.bottom == 2, 
+        'border-left-2': cell.left == 2 || cell.over.left == 2
+      }" (click)="onClickCell($event, cell)" (mousemove)="onMousemoveCell($event, cell)"
+          (mouseleave)="onMouseoutCell($event, cell)">
+          {{cell.player}}
+        </td>
+      </ng-container>
+    </tr>
+  </table>
+</ion-content>

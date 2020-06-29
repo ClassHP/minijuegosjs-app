@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "minijuegosjs": {
+      "hosting": {
+        "app": [
+          "minijuegosjs"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "main": "minijuegosjs"
+  }
+}

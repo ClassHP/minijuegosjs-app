@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyAUf4N0VPNsDH6-nCOJry8Y-ptoMBnRHmE",
+    authDomain: "minijuegosjs.firebaseapp.com",
+    databaseURL: "https://minijuegosjs.firebaseio.com",
+    projectId: "minijuegosjs",
+    storageBucket: "minijuegosjs.appspot.com",
+    messagingSenderId: "969930521099",
+    appId: "1:969930521099:web:d3e984e929c9239349a50e"
+  }
 };
 
 /*

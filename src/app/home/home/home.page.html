@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      MinijuegosJS 
+      <ion-badge color="dark" style="margin-left: 10px;">by @ClassHP</ion-badge>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ng-container *ngFor="let item of minijuegos">
+        <ion-col size="6" size-sm="4" size-md="3">
+          <ion-card (click)="onClickItem(item)" class="ion-text-center">
+            <img [src]="item.image" style="height: 100px; margin-top: 10px;"/>
+            <ion-card-header>
+              <!--<ion-card-subtitle>{{item.category}}</ion-card-subtitle>-->
+              <ion-card-title>{{item.title}}</ion-card-title>
+            </ion-card-header>
+            <!--<ion-card-content>
+              {{item.descrip}}
+            </ion-card-content>-->
+          </ion-card>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<!--<audio autoplay loop hidden>
+  <source src="assets/sounds/theme-7.ogg" type="audio/ogg">
+  Your browser does not support the audio element.
+</audio>-->

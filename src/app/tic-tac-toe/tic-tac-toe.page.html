@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tic tac toe</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="restart()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-text-center">
+  <h1>
+    <ion-text color="dark">Juega: </ion-text> 
+    <ion-text [color]="player == 'X' ? 'danger' : 'secondary'">{{player}}</ion-text>
+  </h1>
+  <table>
+    <tr>
+      <td (click)="onClickBox(1)">
+        <ion-text [color]="boxs[1] == 'X' ? 'danger' : 'secondary'">{{boxs[1]}}</ion-text>
+      </td>
+      <td (click)="onClickBox(2)">
+        <ion-text [color]="boxs[2] == 'X' ? 'danger' : 'secondary'">{{boxs[2]}}</ion-text>
+      </td>
+      <td (click)="onClickBox(3)">
+        <ion-text [color]="boxs[3] == 'X' ? 'danger' : 'secondary'">{{boxs[3]}}</ion-text>
+      </td>
+    </tr>
+    <tr>
+      <td (click)="onClickBox(4)">
+        <ion-text [color]="boxs[4] == 'X' ? 'danger' : 'secondary'">{{boxs[4]}}</ion-text>
+      </td>
+      <td (click)="onClickBox(5)">
+        <ion-text [color]="boxs[5] == 'X' ? 'danger' : 'secondary'">{{boxs[5]}}</ion-text>
+      </td>
+      <td (click)="onClickBox(6)">
+        <ion-text [color]="boxs[6] == 'X' ? 'danger' : 'secondary'">{{boxs[6]}}</ion-text>
+      </td>
+    </tr>
+    <tr>
+      <td (click)="onClickBox(7)">
+        <ion-text [color]="boxs[7] == 'X' ? 'danger' : 'secondary'">{{boxs[7]}}</ion-text>
+      </td>
+      <td (click)="onClickBox(8)">
+        <ion-text [color]="boxs[8] == 'X' ? 'danger' : 'secondary'">{{boxs[8]}}</ion-text>
+      </td>
+      <td (click)="onClickBox(9)">
+        <ion-text [color]="boxs[9] == 'X' ? 'danger' : 'secondary'">{{boxs[9]}}</ion-text>
+      </td>
+    </tr>
+  </table>
+</ion-content>

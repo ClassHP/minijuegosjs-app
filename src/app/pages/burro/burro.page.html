@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>burro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="status == 'end'">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button (click)="joinGame(2)">
+          <ion-icon slot="start" name="play-circle"></ion-icon>
+          Buscar partida de 2 Jugadores
+        </ion-button>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button (click)="joinGame(3)">
+          <ion-icon slot="start" name="play-circle"></ion-icon>
+          Buscar partida de 3 Jugadores
+        </ion-button>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button (click)="joinGame(4)">
+          <ion-icon slot="start" name="play-circle"></ion-icon>
+          Buscar partida de 4 Jugadores
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="status == 'finding'">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        Buscando jugadores...
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="status == 'playing' && gameService.currentPlayer">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button (click)="burro()" [disabled]="!isBurro()">
+          <ion-icon slot="start" name="hand-right"></ion-icon>
+          BURRO
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!--<ion-col size="3">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Descartado</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{gameService.currentPlayer.discart}}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>-->
+      <ion-col size="3" *ngFor="let item of gameService.currentPlayer.cards; index as i">
+        <ion-card>
+          <img src="assets/images/img_cards/{{item}}.svg" alt="{{item}}">
+          <ion-card-header>
+              <ion-button (click)="discard(i)">
+                <ion-icon slot="start" name="arrow-undo"></ion-icon>
+                Descartar
+              </ion-button>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="3" *ngIf="isNextEnabe()">
+        <ion-card>
+          <img src="assets/images/img_cards/1B.svg" alt="next">
+          <ion-card-content>
+              <ion-button (click)="takeNext()">
+                <ion-icon slot="start" name="arrow-up"></ion-icon>
+                Tomar
+              </ion-button>            
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
