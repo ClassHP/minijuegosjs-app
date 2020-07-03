@@ -1,9 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>burro</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Burro!</ion-title>
+    <ion-buttons slot="end">
+      <!--<ion-button color="primary" (click)="restart()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>-->
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
   <ion-grid *ngIf="status == 'end'">
     <ion-row>
@@ -30,20 +37,35 @@
   <ion-grid *ngIf="status == 'finding'">
     <ion-row>
       <ion-col size="12" class="ion-text-center">
-        Buscando jugadores...
+        <span class="ion-margin">
+          Buscando jugadores...
+        </span>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid *ngIf="status == 'playing' && gameService.currentPlayer">
+  <ion-grid *ngIf="status == 'playing' && gameService.currentPlayer" class="ion-padding-vertical">
+    <ion-row class="ion-align-items-center">
+      <ng-container *ngFor="let player of gameService.players">
+        <ion-col size="3" class="ion-text-center" *ngIf="gameService.playerId != player.playerId && player.cards">
+          <div>{{ player.burro || "..." }}</div>
+          <div class="ion-padding-vertical">
+            <img *ngIf="player.cards.length > 0" src="assets/images/img_cards/1B.svg" alt="card" style="width: 30%;margin-right: -15%;transform: rotate(-20deg) scale(0.85) translateY(15%);">
+            <img *ngIf="player.cards.length > 1" src="assets/images/img_cards/1B.svg" alt="card" style="width: 30%;margin-right: -15%;transform: rotate(-10deg)  scale(0.85);">
+            <img *ngIf="player.cards.length > 2" src="assets/images/img_cards/1B.svg" alt="card" style="width: 30%;margin-right: -15%;transform: rotate(10deg) scale(0.85);">
+            <img *ngIf="player.cards.length > 3" src="assets/images/img_cards/1B.svg" alt="card" style="width: 30%;transform: rotate(20deg) scale(0.85) translateY(15%);">
+          </div>
+        </ion-col>
+      </ng-container>
+    </ion-row>
     <ion-row>
       <ion-col size="12" class="ion-text-center">
-        <ion-button (click)="burro()" [disabled]="!isBurro()">
+        <ion-button (click)="burro()" [disabled]="!isBurro()" class="ion-margin" style="font-size: xx-large;height: 100px;">
           <ion-icon slot="start" name="hand-right"></ion-icon>
           BURRO
         </ion-button>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row style="max-width: 600px;margin: auto;">
       <!--<ion-col size="3">
         <ion-card>
           <ion-card-header>
@@ -55,25 +77,21 @@
         </ion-card>
       </ion-col>-->
       <ion-col size="3" *ngFor="let item of gameService.currentPlayer.cards; index as i">
-        <ion-card>
+        <ion-card class="ion-no-margin ion-text-center">
           <img src="assets/images/img_cards/{{item}}.svg" alt="{{item}}">
-          <ion-card-header>
-              <ion-button (click)="discard(i)">
-                <ion-icon slot="start" name="arrow-undo"></ion-icon>
-                Descartar
-              </ion-button>
-          </ion-card-header>
+          <ion-button (click)="discard(i)">
+            <ion-icon slot="start" name="arrow-undo"></ion-icon>
+            <span class="ion-hide-sm-down" style="font-size: smaller;">Descartar</span>
+          </ion-button>
         </ion-card>
       </ion-col>
       <ion-col size="3" *ngIf="isNextEnabe()">
-        <ion-card>
+        <ion-card (click)="takeNext()" class="ion-no-margin ion-text-center">
           <img src="assets/images/img_cards/1B.svg" alt="next">
-          <ion-card-content>
-              <ion-button (click)="takeNext()">
-                <ion-icon slot="start" name="arrow-up"></ion-icon>
-                Tomar
-              </ion-button>            
-          </ion-card-content>
+          <ion-button>
+            <ion-icon slot="start" name="arrow-down"></ion-icon>
+            <span class="ion-hide-sm-down" style="font-size: smaller;">Tomar</span>
+          </ion-button> 
         </ion-card>
       </ion-col>
     </ion-row>

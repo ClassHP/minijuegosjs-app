@@ -176,6 +176,9 @@ export class BurroPage implements OnInit, OnDestroy {
   }
 
   isNextEnabe() {
+    if(!this.gameService.currentPlayer || !this.gameService.currentPlayer.cards) {
+      return false;
+    }
     let current = this.gameService.getCurrentPlayer();
     let cards = current.player.cards;
     if(cards.length < 4) {

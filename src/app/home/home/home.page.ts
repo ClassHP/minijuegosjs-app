@@ -23,6 +23,13 @@ export class HomePage implements OnInit {
       descrip: 'Colchón , cuadrito, cajas o puntito.',
       href: '/timbiriche'
     },
+    { 
+      category: 'Cartas', 
+      title: 'Burro!', 
+      image: 'assets/images/burro.png',
+      descrip: 'Juego de cartas.',
+      href: '/burro'
+    },
   ]
 
   constructor(private router: Router) { }
