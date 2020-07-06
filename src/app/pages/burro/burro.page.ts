@@ -20,46 +20,51 @@ export class BurroPage implements OnInit, OnDestroy {
 
   async joinGame(maxPlayers, roomId?) {
     this.status = 'finding';
-    await this.gameService.joinOrCreate('burro', maxPlayers, roomId, null, (room) => {
+    await this.gameService.joinOrCreate('burro', maxPlayers, roomId, (room) => {
       console.log(room);
-      this.status = room.status;
-      if (room.status === 'end') {
-        if (room.loser === this.gameService.playerId) {
+      /*this.status = room.status;*/
+    }, async (player, key) => {
+      console.log(player, key);
+    }, (type, message) => {
+      if (type === 'start') {
+        this.status = 'playing';
+      }
+      if (type === 'endRound') {
+        if (message.playerIdLoser === this.gameService.playerId) {
+          this.toolsService.presentAlert('Fin de la ronda', `😓 Llevas la ${message.letter}, ahora: ${message.burro}`);
+        } else {
+          this.toolsService.presentAlert('Fin de la ronda', `Todo bien 👍`);
+        }
+      }
+      if (type === 'endGame') {
+        if (message.playerIdLoser === this.gameService.playerId) {
           this.toolsService.presentAlert('¡Fin del juego!', `Eres el BURRO 🦓 😝`);
         } else {
           this.toolsService.presentAlert('¡Fin del juego!', `🎉 No eres el BURRO 👍`);
         }
         this.gameService.leaveRoom();
       }
-    }, async players => {
-      console.log(players);
-    }, message => {
-      if (message.type === 'endRound') {
-        if (message.loser === this.gameService.playerId) {
-          this.toolsService.presentAlert('Fin de la ronda', `😓 Llevas la ${message.letter}, ahora: ${message.burro}`);
-        } else {
-          this.toolsService.presentAlert('Fin de la ronda', `Todo bien 👍`);
-        }
-      }
+    }, (code) => {
+      this.status = 'end';
     });
   }
 
   async discard(index) {
     const current = this.gameService.currentPlayer;
     if (!current.discardTo && current.cards.length === 4) {
-      await this.gameService.setStateData({ state: 'discard', index });
+      await this.gameService.send('discard', { index });
     }
   }
 
   async takeNext() {
     const current = this.gameService.currentPlayer;
-    if (current.discard && current.cards.length < 4) {
-      await this.gameService.setStateData({ state: 'takeNext' });
+    if (current.discardFrom && current.cards.length < 4) {
+      await this.gameService.send('takeNext');
     }
   }
 
   isBurro() {
-    if (this.gameService.currentPlayer.enableBurro || this.gameService.roomData.enableBurro) {
+    if (this.gameService.currentPlayer?.enableBurro || this.gameService.state?.enableBurro) {
       return true;
     }
     return false;
@@ -68,15 +73,12 @@ export class BurroPage implements OnInit, OnDestroy {
   async burro() {
     if (this.isBurro()) {
       this.gameService.currentPlayer.enableBurro = false;
-      await this.gameService.setStateData({ state: 'setBurro' });
+      await this.gameService.send('setBurro');
     }
   }
 
-  isNextEnabe() {
-    if (this.gameService?.currentPlayer?.discard) {
-      return true;
-    }
-    return false;
+  takeNextEnable() {
+    return (this.gameService.currentPlayer?.discardFrom && this.gameService.currentPlayer?.cards?.length < 4);
   }
 
   ngOnDestroy() {
