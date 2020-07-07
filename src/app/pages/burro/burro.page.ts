@@ -73,7 +73,7 @@ export class BurroPage implements OnInit, OnDestroy {
   async burro() {
     if (this.isBurro()) {
       this.gameService.currentPlayer.enableBurro = false;
-      await this.gameService.send('setBurro');
+      await this.gameService.send('burro');
     }
   }
 
