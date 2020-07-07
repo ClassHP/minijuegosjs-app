@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client, Room } from 'colyseus.js';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class GameService {
     onMessage?: (type, message) => void,
     onLeave?: (code) => void
   ) {
-    const client = new Client('ws://localhost:2567');
+    const client = new Client(environment.colyseusUrl);
     client.joinOrCreate<any>(gameId, { numPlayers }).then(room => {
       console.log(room.sessionId, 'joined', room);
 
