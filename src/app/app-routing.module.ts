@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'burro',
     loadChildren: () => import('./pages/burro/burro.module').then( m => m.BurroPageModule)
+  },
+  {
+    path: 'tetris',
+    loadChildren: () => import('./pages/tetris/tetris.module').then( m => m.TetrisPageModule)
   }
 ];
 

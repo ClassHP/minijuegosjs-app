@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tetris</ion-title>
+    <ion-buttons slot="end">
+      <!--<ion-button color="primary" (click)="restart()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>-->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-row>
+    <ion-col size="auto" style="margin-left: auto;">
+      <div class="matrix">
+        <div *ngFor="let row of matrix; let rowI = index" class="row">
+          <div *ngFor="let col of row; let colI = index" class="cell color-{{ getMatrixVal(rowI, colI) }}">
+          </div>
+        </div>
+      </div>
+    </ion-col>
+    <ion-col size="auto" style="margin-right: auto;min-width: 100px;">
+      <ion-text color="primary">
+        <h2>{{ score }}</h2>
+      </ion-text>
+      <div>Next:</div>
+      <div *ngFor="let row of nextShape; let rowI = index" class="row">
+        <div *ngFor="let col of row; let colI = index" class="cell color-{{ col }}">
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+  <div class="actions ion-text-center">
+    <div>
+      <ion-button (mousedown)="spin()" (touch)="spin()">
+        <ion-icon slot="icon-only" name="reload"></ion-icon>
+      </ion-button>
+    </div>
+    <ion-button (mousedown)="move(-1)" (touch)="move(-1)">
+      <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+    </ion-button>
+    <ion-button (mousedown)="down(true)" (mouseup)="down(false)" (mouseout)="down(false)"
+      (touchstart)="down(true)" (touchend)="down(false)">
+      <ion-icon slot="icon-only" name="arrow-down"></ion-icon>
+    </ion-button>
+    <ion-button (mousedown)="move(1)" (touch)="move(1)">
+      <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

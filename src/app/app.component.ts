@@ -31,6 +31,11 @@ export class AppComponent implements OnInit {
       title: 'Burro!',
       url: '/burro',
       icon: 'heart'
+    },
+    {
+      title: 'Tetris',
+      url: '/tetris',
+      icon: 'heart'
     }
   ];
   public labels = [];
