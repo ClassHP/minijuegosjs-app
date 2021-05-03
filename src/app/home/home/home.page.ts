@@ -37,6 +37,13 @@ export class HomePage implements OnInit {
       descrip: 'Juego clasico arcade',
       href: '/tetris'
     },
+    {
+      category: 'Puzle',
+      title: 'Puzzle Infinito',
+      image: 'assets/images/infinite1.png',
+      descrip: 'Basado en un juego de mesa',
+      href: '/infinite1'
+    },
   ];
 
   constructor(private router: Router) { }

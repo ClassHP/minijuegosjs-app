@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'tetris',
     loadChildren: () => import('./pages/tetris/tetris.module').then( m => m.TetrisPageModule)
+  },
+  {
+    path: 'infinite1',
+    loadChildren: () => import('./pages/infinite1/infinite1.module').then( m => m.Infinite1PageModule)
   }
 ];
 

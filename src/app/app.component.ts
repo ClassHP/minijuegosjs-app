@@ -36,6 +36,11 @@ export class AppComponent implements OnInit {
       title: 'Tetris',
       url: '/tetris',
       icon: 'heart'
+    },
+    {
+      title: 'Puzzle Infinito',
+      url: '/infinite1',
+      icon: 'timer'
     }
   ];
   public labels = [];
