@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Color Puzzle</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="onClickHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>  
+  <div class="selector">
+    <div class="row">
+      <ion-icon name="timer-outline" style="margin: 0 15px;"></ion-icon>
+      <span>{{ time }}</span>
+      <ion-button color="primary" (click)="init()" fill="clear">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+  <div class="matrix">
+    <div *ngFor="let row of matrix; let rowI = index" class="row">
+      <div *ngFor="let col of row; let colI = index" 
+        class="cell" (click)="onClickCell(rowI, colI)" [style.background-color]="getRGB(rowI, colI)">
+      </div>
+    </div>
+  </div>
+</ion-content>

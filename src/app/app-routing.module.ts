@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: 'infinite1',
     loadChildren: () => import('./pages/infinite1/infinite1.module').then( m => m.Infinite1PageModule)
+  },
+  {
+    path: 'color-puzzle',
+    loadChildren: () => import('./pages/color-puzzle/color-puzzle.module').then( m => m.ColorPuzzlePageModule)
   }
 ];
 

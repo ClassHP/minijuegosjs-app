@@ -1,0 +1,91 @@
+.matrix {
+  margin:auto;
+  width: fit-content;
+  border: solid 0.7vmin #656565;
+  border-radius: 4vmin;
+
+  .row {
+    display: flex;
+  }
+
+  .cell {
+    width: 10vmin;
+    height: 10vmin;
+    margin: 0.7vmin;
+    border-radius: 3vmin;
+  }
+
+  @media (min-width: 600px) {
+    .cell {
+      width: 9vmin;
+      height: 9vmin;
+      margin: 0.5vmin;
+    }
+  }
+  
+  .color--1 {
+    border: solid 0.7vmin #656565;
+  }
+}
+
+.selector {
+  margin: 10px auto;
+  width: fit-content;
+  border: solid 0.7vmin #656565;
+  border-radius: 4vmin;
+
+  .selected {
+    border: solid 0.7vmin #656565;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  .cell {
+    width: 10vmin;
+    height: 10vmin;
+    margin: 0.5vmin;
+    border-radius: 3vmin;
+    display: flex;
+    div {
+      margin: auto;
+    }
+  }
+
+  @media (min-width: 600px) {
+    .cell {
+      width: 9vmin;
+      height: 9vmin;
+    }
+  }
+}
+
+.color-0 {
+  background-color: blue;
+}
+.color-1 {
+  background-color: red;
+}
+.color-2 {
+  background-color: yellow;
+}
+.color-3 {
+  background-color: green;
+}
+.color-4 {
+  background-color: purple;
+}
+.color-5 {
+  background-color: orange;
+}
+.color-6 {
+  background-color: brown;
+}
+.color-7 {
+  background-color: gray;
+}
+.color--2 {
+  background-color: rgb(61, 61, 61);
+}
