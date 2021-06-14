@@ -46,7 +46,7 @@ export class HomePage implements OnInit {
     },
     {
       category: 'Clasico',
-      title: 'Crucigramas',
+      title: 'Crucigrama',
       image: 'assets/images/crosswords.png',
       descrip: 'Clasico juego de palabras cruzadas.',
       href: '/crosswords'
