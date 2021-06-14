@@ -38,7 +38,8 @@ export class CrosswordsPage implements OnInit {
     public modalController: ModalController,
     public toolsService: ToolsService
   ) {
-    this.wordsAll = require('./diccionario-crucigrama.json');
+    this.wordsAll = require('./diccionario-crucigrama-2.json');
+    console.log("words: ", this.wordsAll.length);
   }
 
   ngOnInit() {
@@ -47,18 +48,44 @@ export class CrosswordsPage implements OnInit {
 
   init() {
     this.words = [];
-    for (let i = 0; i < 15; i++) {
-      let rand = Math.floor(Math.random() * this.wordsAll.length);
-      let word = this.wordsAll[rand];
-      let w = word.w.toUpperCase();
-      
-      const find = "ÁÉÍÓÚ";
-      const replace = "AEIOU";
-      for(let i=0; i < find.length; i++) {
-        w = w.split(find[i]).join(replace[i]);
-      }
+    let prevWord = null;
+    let dif = [ 10, 10, 10, 3, 2, 1, 1, 1 ];
+    for (let i = 0; i < 10; i++) {
+      let repeat = false;
+      do {
+        let rand = Math.floor(Math.random() * this.wordsAll.length);
+        let word = this.wordsAll[rand];
+        let w = word.w.toUpperCase();
+        
+        const find = "ÁÉÍÓÚ";
+        const replace = "AEIOU";
+        for(let i=0; i < find.length; i++) {
+          w = w.split(find[i]).join(replace[i]);
+        }
 
-      this.words.push({ i: i, w: w, d: word.d, arist: [] })
+        if(prevWord) {          
+          repeat = (() => {
+            if (dif[(w.length > 9) ? 7 : w.length - 2] <= 0) { 
+              return true;
+            }
+            for(let c1 of prevWord) {
+              for(let c2 of w) {
+                if(c1 == c2) {
+                  return false;
+                }
+              }
+            }
+            return true;
+          })();
+        }
+
+        if (!repeat) {
+          dif[(w.length > 9) ? 7 : w.length - 2] --;
+          prevWord = w;
+          this.words.push({ i: i, w: w, d: word.d, arist: [] })
+        }
+      } while(repeat);
+
     }
     this.calcularAristas();
     let tablas = this.calcularTablas();

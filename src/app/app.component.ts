@@ -41,6 +41,11 @@ export class AppComponent implements OnInit {
       title: 'Puzzle Infinito',
       url: '/infinite1',
       icon: 'timer'
+    },
+    {
+      title: 'Crucigrama',
+      url: '/crossword',
+      icon: 'language'
     }
   ];
   public labels = [];

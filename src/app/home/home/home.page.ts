@@ -44,6 +44,13 @@ export class HomePage implements OnInit {
       descrip: 'Basado en un juego de mesa',
       href: '/infinite1'
     },
+    {
+      category: 'Clasico',
+      title: 'Crucigramas',
+      image: 'assets/images/crosswords.png',
+      descrip: 'Clasico juego de palabras cruzadas.',
+      href: '/crosswords'
+    },
   ];
 
   constructor(private router: Router) { }
