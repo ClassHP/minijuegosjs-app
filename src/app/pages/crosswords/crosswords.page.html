@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crucigrama</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="init()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollX scrollY class="ion-padding">
+  <table *ngIf="matrix" class="tablestyle" [style.zoom]="zoom">
+    <tr *ngFor="let row of matrix">
+      <td *ngFor="let col of row" [class.blockletter]="col.c" 
+        [class.blockempty]="!col.c" (click)="onSelect(col)">
+        {{ col.check ? col.c : ''}}
+      </td>
+    </tr>
+  </table>
+</ion-content>

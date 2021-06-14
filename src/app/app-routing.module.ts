@@ -30,7 +30,11 @@ const routes: Routes = [
   {
     path: 'infinite1',
     loadChildren: () => import('./pages/infinite1/infinite1.module').then( m => m.Infinite1PageModule)
+  },  {
+    path: 'crosswords',
+    loadChildren: () => import('./pages/crosswords/crosswords.module').then( m => m.CrosswordsPageModule)
   }
+
 ];
 
 @NgModule({

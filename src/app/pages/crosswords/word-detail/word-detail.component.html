@@ -1,0 +1,40 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Definición</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <div></div>
+      <ion-text color="dark">
+        <h2>{{w.d}}</h2>
+      </ion-text>
+      <div class="ion-margin-top">
+        <table class="tablestyle" [style.zoom]="1">
+          <tr *ngFor="let f of table">
+            <td *ngFor="let c of f" [class.blockletter]="c.c" [class.blockempty]="!c.c">
+              {{c.check ? c.c : ''}}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <form #form="ngForm" (ngSubmit)="accept(form)">
+        <ion-item class="ion-margin-top">
+          <ion-label position="fixed">Respuesta:</ion-label>
+          <ion-input #input [maxlength]="w.w.length" [autofocus]="false" [(ngModel)]="respuesta" [ngModelOptions]="{standalone: true}"></ion-input>
+        </ion-item>
+        <ion-button type="submit" class="ion-margin-top">
+          Aceptar
+          <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+        </ion-button>
+      </form>
+    </ion-card-content>
+
+  </ion-card>
+</ion-content>

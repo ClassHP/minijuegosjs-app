@@ -1,0 +1,21 @@
+.blockletter {
+  width: 25px;
+  height: 25px;
+  min-width: 25px;
+  min-height: 25px;
+  text-align: center;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+}
+.blockempty {
+  width: 25px;
+  height: 25px;
+  min-width: 25px;
+  min-height: 25px;
+}
+.tablestyle {
+  border-spacing: 3px;
+  border-collapse: separate;
+  margin: auto;
+}
