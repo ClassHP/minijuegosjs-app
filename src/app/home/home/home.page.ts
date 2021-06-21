@@ -51,6 +51,13 @@ export class HomePage implements OnInit {
       descrip: 'Clasico juego de palabras cruzadas.',
       href: '/crosswords'
     },
+    {
+      category: 'Puzle',
+      title: 'Rompecabeza',
+      image: 'assets/images/jigsaw.png',
+      descrip: 'Rompecabezas infantil.',
+      href: '/jigsaw'
+    },
   ];
 
   constructor(private router: Router) { }

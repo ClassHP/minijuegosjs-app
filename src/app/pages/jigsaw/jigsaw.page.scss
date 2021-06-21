@@ -1,0 +1,12 @@
+.game-container {
+  width: 90vmin;
+  max-width: 65vh;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+
+  svg {
+    overflow: visible;
+  }
+}

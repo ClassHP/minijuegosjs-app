@@ -33,6 +33,10 @@ const routes: Routes = [
   },  {
     path: 'crosswords',
     loadChildren: () => import('./pages/crosswords/crosswords.module').then( m => m.CrosswordsPageModule)
+  },
+  {
+    path: 'jigsaw',
+    loadChildren: () => import('./pages/jigsaw/jigsaw.module').then( m => m.JigsawPageModule)
   }
 
 ];

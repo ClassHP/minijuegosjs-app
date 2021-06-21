@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Rompecabeza</ion-title>
+    <ion-buttons slot="end" *ngIf="shapes">
+      <ion-button color="primary" (click)="clear()">
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content (mousemove)="onMouseMove($event)" (touchmove)="onMouseMove($event)">
+  <div class="menu-container" *ngIf="!shapes">
+    <ion-segment [(ngModel)]="size">
+      <ion-segment-button [value]="0">
+        <ion-label>3 x 3</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="1">
+        <ion-label>4 x 4</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="2">
+        <ion-label>5 x 5</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="3">
+        <ion-label>6 x 6</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <ion-grid>
+      <ion-row>
+        <ion-col  size="3" *ngFor="let item of images" (click)="init(size, item)">
+          <img src="assets/images/jigsaw/jigsaw{{item}}.jpg" alt="">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="game-container" *ngIf="shapes">
+    <svg viewBox="0 0 960 960" #gameSvg>
+      <defs>
+        <clipPath id="shape{{ shape.i }}" *ngFor="let shape of shapes">
+          <path fill="none"
+            [attr.d]="shape.d" />
+        </clipPath>
+      </defs>
+
+      <g>
+        <image id="imageBase" style="opacity:0.1" width="960" height="960" 
+          [attr.xlink:href]="'assets/images/jigsaw/jigsaw' + image + '.jpg'"></image>
+      </g>
+
+      <g *ngFor="let shape of shapes" [attr.transform]="'translate(' + shape.x + ',' + shape.y + ')'">
+        <image width="960" height="960" [attr.clip-path]="'url(#shape' + shape.i + ')'" 
+          [attr.xlink:href]="'assets/images/jigsaw/jigsaw' + image + '.jpg'" 
+          (mousedown)="onMouseDownImage($event, shape)" 
+          (mouseup)="onMouseUpImage($event, shape)" 
+          (touchstart)="onMouseDownImage($event, shape)" 
+          (touchend)="onMouseUpImage($event, shape)" ></image>
+      </g>
+
+    </svg>
+  </div>
+
+</ion-content>

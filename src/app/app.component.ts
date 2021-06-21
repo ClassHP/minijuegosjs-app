@@ -46,6 +46,11 @@ export class AppComponent implements OnInit {
       title: 'Crucigrama',
       url: '/crossword',
       icon: 'language'
+    },
+    {
+      title: 'Rompecabeza',
+      url: '/jigsaw',
+      icon: 'grid'
     }
   ];
   public labels = [];
