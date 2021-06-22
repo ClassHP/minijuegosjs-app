@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { MenuData } from './models/menu-data';
 
 @Component({
   selector: 'app-root',
@@ -10,49 +11,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public selectedIndex = 0;
-  public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Tic tac toe',
-      url: '/tic-tac-toe',
-      icon: 'paper-plane'
-    },
-    {
-      title: 'Timbiriche',
-      url: '/timbiriche',
-      icon: 'paper-plane'
-    },
-    {
-      title: 'Burro!',
-      url: '/burro',
-      icon: 'heart'
-    },
-    {
-      title: 'Tetris',
-      url: '/tetris',
-      icon: 'heart'
-    },
-    {
-      title: 'Puzzle Infinito',
-      url: '/infinite1',
-      icon: 'timer'
-    },
-    {
-      title: 'Crucigrama',
-      url: '/crosswords',
-      icon: 'language'
-    },
-    {
-      title: 'Rompecabeza',
-      url: '/jigsaw',
-      icon: 'grid'
-    }
-  ];
+  public selectedIndex = -1;
+  public appPages = MenuData;
   public labels = [];
   public darkmode = true;
 

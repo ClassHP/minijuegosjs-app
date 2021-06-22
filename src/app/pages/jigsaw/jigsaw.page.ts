@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { ToolsService } from 'src/app/services/tools.service';
 
 @Component({
@@ -127,16 +128,17 @@ export class JigsawPage implements OnInit {
   size = 1;
   @ViewChild('gameSvg') gameSvg: ElementRef;
 
-  constructor(public toolsService: ToolsService) { }
+  constructor(public toolsService: ToolsService, public alertController: AlertController) { }
 
   ngOnInit() {
     //this.init(0, 2);
   }
 
-  init(shapeId, image) {
+  async init(image) {
+    await this.presentAlertRadioSize();
     this.image = image;
     this.shapes = [];
-    let shapeData = this.shapesAll[shapeId];
+    let shapeData = this.shapesAll[this.size];
     let x = 0;
     let y = 0;
     for (let i = 0; i < shapeData.paths.length; i++) {
@@ -230,6 +232,29 @@ export class JigsawPage implements OnInit {
       this.currentMove.y = clientY;
       //console.log('onMouseMove', event, shape);
     }
+  }
+
+  async presentAlertRadioSize() {
+    let inputs = [];
+    for(let i=0; i < 4; i++) {
+      inputs.push({
+        type: 'radio',
+        label: '' + (i + 3) + ' x ' + (i + 3),
+        handler: () => {
+          this.size = i;
+          alert.dismiss();
+        },
+        checked: (this.size == i)
+      });
+    }
+    const alert = await this.alertController.create({
+      header: 'Dificultad',
+      inputs: inputs,
+      buttons: ['Aceptar']
+    });
+
+    await alert.present();
+    await alert.onDidDismiss();
   }
 
 }

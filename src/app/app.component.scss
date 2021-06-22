@@ -117,3 +117,12 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+ion-thumbnail {
+  width:40px;
+  height:40px;
+  img {
+    width:auto !important;
+    height:auto !important;
+  }
+}
