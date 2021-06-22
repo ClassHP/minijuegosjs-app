@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Crucigrama',
-      url: '/crossword',
+      url: '/crosswords',
       icon: 'language'
     },
     {
