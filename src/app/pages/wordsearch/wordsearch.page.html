@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sopa de letras</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="init()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col *ngFor="let word of words" size="auto">
+        <ion-badge [color]="word.finded ? 'success' : 'medium'">{{ word.word }}</ion-badge>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div *ngIf="matrix" class="tablestyle noselect" [style.zoom]="zoom"
+    (mouseleave)="onMouseUpCell($event)"
+    (mouseup)="onMouseUpCell($event)"
+    (touchend)="onMouseUpCell($event)" >
+    <div class="row" *ngFor="let row of matrix">
+      <div class="col" *ngFor="let col of row" [class.mark]="col.finded" [class.selected]="col.selected"
+        [attr.data-row]="col.row" [attr.data-col]="col.col"
+        (mousedown)="onMouseDownCell($event, col)" 
+        (mouseenter)="onMouseEnterCell($event, col)"
+        (touchstart)="onTouchStartCell($event, col)" 
+        (touchmove)="onTouchMoveCell($event, col)">
+        {{ col.c }}
+      </div>
+    </div>
+  </div>
+</ion-content>

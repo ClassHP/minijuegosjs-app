@@ -14,23 +14,9 @@
 
 <ion-content (mousemove)="onMouseMove($event)" (touchmove)="onMouseMove($event)">
   <div class="menu-container" *ngIf="!shapes">
-    <!-- <ion-segment [(ngModel)]="size">
-      <ion-segment-button [value]="0">
-        <ion-label>3 x 3</ion-label>
-      </ion-segment-button>
-      <ion-segment-button [value]="1">
-        <ion-label>4 x 4</ion-label>
-      </ion-segment-button>
-      <ion-segment-button [value]="2">
-        <ion-label>5 x 5</ion-label>
-      </ion-segment-button>
-      <ion-segment-button [value]="3">
-        <ion-label>6 x 6</ion-label>
-      </ion-segment-button>
-    </ion-segment> -->
     <ion-grid>
       <ion-row>
-        <ion-col  size="3" *ngFor="let item of images" (click)="init(item)">
+        <ion-col size-lg="1" size="3" *ngFor="let item of images" (click)="init(item)">
           <img src="assets/images/jigsaw/jigsaw{{item}}.jpg" alt="">
         </ion-col>
       </ion-row>

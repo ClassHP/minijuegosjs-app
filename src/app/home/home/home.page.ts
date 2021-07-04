@@ -10,6 +10,7 @@ import { MenuData } from 'src/app/models/menu-data';
 export class HomePage implements OnInit {
 
   minijuegos = MenuData;
+  public darkmode = true;
 
   constructor(private router: Router) { }
 
@@ -18,6 +19,11 @@ export class HomePage implements OnInit {
 
   onClickItem(item) {
     this.router.navigate([item.href]);
+  }
+
+  darkModeToggle(shouldCheck) {
+    this.darkmode = shouldCheck;
+    document.body.classList.toggle('dark', this.darkmode);
   }
 
 }

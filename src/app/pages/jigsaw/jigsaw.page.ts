@@ -190,6 +190,7 @@ export class JigsawPage implements OnInit {
   }
 
   onMouseDownImage(event, shape) {
+    event.preventDefault();
     let clientX = event.clientX || ((event.targetTouches && event.targetTouches[0]) ? event.targetTouches[0].clientX : null);
     let clientY = event.clientY || ((event.targetTouches && event.targetTouches[0]) ? event.targetTouches[0].clientY : null);
 
@@ -202,6 +203,7 @@ export class JigsawPage implements OnInit {
   }
 
   onMouseUpImage(event, shape) {
+    event.preventDefault();
     if (this.currentMove && this.currentMove.shape.i == shape.i) {
       this.currentMove = null;
       if (Math.abs(shape.x) < 50 && Math.abs(shape.y) < 50) {
@@ -216,6 +218,7 @@ export class JigsawPage implements OnInit {
   }
 
   onMouseMove(event) {
+    event.preventDefault();
     let clientX = event.clientX || ((event.targetTouches && event.targetTouches[0]) ? event.targetTouches[0].clientX : null);
     let clientY = event.clientY || ((event.targetTouches && event.targetTouches[0]) ? event.targetTouches[0].clientY : null);
 

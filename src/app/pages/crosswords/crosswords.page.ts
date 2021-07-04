@@ -55,19 +55,13 @@ export class CrosswordsPage implements OnInit {
       do {
         let rand = Math.floor(Math.random() * this.wordsAll.length);
         let word = this.wordsAll[rand];
-        let w = word.w.toUpperCase();
-        
-        const find = "ÁÉÍÓÚ";
-        const replace = "AEIOU";
-        for(let i=0; i < find.length; i++) {
-          w = w.split(find[i]).join(replace[i]);
-        }
-
-        if(prevWord) {          
-          repeat = (() => {
-            if (dif[(w.length > 9) ? 7 : w.length - 2] <= 0) { 
-              return true;
-            }
+        let w = this.removeAcents(word.w.toUpperCase());
+       
+        repeat = (() => {
+          if (dif[(w.length > 9) ? 7 : w.length - 2] <= 0) { 
+            return true;
+          }
+          if(prevWord) {   
             for(let c1 of prevWord) {
               for(let c2 of w) {
                 if(c1 == c2) {
@@ -76,8 +70,9 @@ export class CrosswordsPage implements OnInit {
               }
             }
             return true;
-          })();
-        }
+          }
+          return false;
+        })();
 
         if (!repeat) {
           dif[(w.length > 9) ? 7 : w.length - 2] --;
@@ -102,6 +97,15 @@ export class CrosswordsPage implements OnInit {
       }
     }
     console.log('this.matix', this.matrix);
+  }
+
+  removeAcents(word) {
+    const find = "ÁÉÍÓÚ";
+    const replace = "AEIOU";
+    for(let i=0; i < find.length; i++) {
+      word = word.split(find[i]).join(replace[i]);
+    }
+    return word;
   }
 
   calcularAristas() {

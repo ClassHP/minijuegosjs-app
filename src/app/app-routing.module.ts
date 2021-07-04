@@ -37,6 +37,10 @@ const routes: Routes = [
   {
     path: 'jigsaw',
     loadChildren: () => import('./pages/jigsaw/jigsaw.module').then( m => m.JigsawPageModule)
+  },
+  {
+    path: 'wordsearch',
+    loadChildren: () => import('./pages/wordsearch/wordsearch.module').then( m => m.WordsearchPageModule)
   }
 
 ];

@@ -14,7 +14,7 @@
   <ion-grid>
     <ion-row>
       <ng-container *ngFor="let item of minijuegos">
-        <ion-col size="6" size-sm="4" size-md="3">
+        <ion-col size="6" size-sm="4" size-md="3" size-lg="2">
           <ion-card (click)="onClickItem(item)" class="ion-text-center">
             <img [src]="item.image" style="height: 100px; margin-top: 10px;"/>
             <ion-card-header>
@@ -34,3 +34,14 @@
   <source src="assets/sounds/theme-7.ogg" type="audio/ogg">
   Your browser does not support the audio element.
 </audio>-->
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-icon slot="start" name="moon"></ion-icon>
+      <ion-label>
+        Dark Mode
+      </ion-label>
+      <ion-toggle (ionChange)="darkModeToggle($event.detail.checked)" slot="end" [checked]="darkmode"></ion-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

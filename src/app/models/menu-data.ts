@@ -48,4 +48,11 @@ export const MenuData = [
     descrip: 'Rompecabezas infantil.',
     href: '/jigsaw'
   },
+  {
+    category: 'Clasico',
+    title: 'Sopa de Letras',
+    image: 'assets/images/wordsearch.png',
+    descrip: 'Clasico juego de buscar palabras',
+    href: '/wordsearch'
+  },
 ]
