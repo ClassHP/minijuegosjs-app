@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToolsService } from 'src/app/services/tools.service';
 
 @Component({
   selector: 'app-wordsearch',
@@ -12,7 +13,7 @@ export class WordsearchPage implements OnInit {
   wordsAll;
   selection: { firstCell: any, word: string, cells: any[] } = null;
 
-  constructor() { 
+  constructor(public toolsService: ToolsService) { 
     this.wordsAll = require('./words-es.json');
   }
 
@@ -92,6 +93,20 @@ export class WordsearchPage implements OnInit {
     return reverse;
   }
 
+  validateEnd() {
+    var end = true;
+    for (let word of this.words) {
+      if (!word.finded) {
+        end = false;
+      }
+    }
+    if (end) {
+      this.toolsService.presentAlert('¡Bien jugado!', 'Muy bien, encontraste todas las palabras.').then(() => {
+        this.init();
+      });
+    }
+  }
+
   onTouchStartCell(event, col) {
     this.onMouseDownCell(event, col);
     event.preventDefault();
@@ -158,6 +173,8 @@ export class WordsearchPage implements OnInit {
           for(let cell of this.selection.cells) {
             cell.finded = true;
           }
+          this.validateEnd();
+          break;
         }
       }
       this.selection = null;
