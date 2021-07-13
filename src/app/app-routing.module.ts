@@ -41,6 +41,10 @@ const routes: Routes = [
   {
     path: 'wordsearch',
     loadChildren: () => import('./pages/wordsearch/wordsearch.module').then( m => m.WordsearchPageModule)
+  },
+  {
+    path: 'paint',
+    loadChildren: () => import('./pages/paint/paint.module').then( m => m.PaintPageModule)
   }
 
 ];

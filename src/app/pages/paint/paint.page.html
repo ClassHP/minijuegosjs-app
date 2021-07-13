@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pintar</ion-title>
+    <ion-buttons slot="end" *ngIf="svgData">
+      <ion-button color="primary" (click)="clear()">
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-grid *ngIf="svgData">
+    <ion-row style="flex-wrap: nowrap;overflow: auto;">
+      <ng-container *ngFor="let color of svgData.colors">
+        <ion-col size="auto" *ngIf="color.count > 0" (click)="onClickColor(color)">
+          <ion-icon name="caret-forward-outline" *ngIf="color == colorSelected"></ion-icon>
+          <ion-badge [style.--background]="color.fill">{{ color.count }}</ion-badge>
+        </ion-col>
+      </ng-container>
+      <ion-col size="auto" *ngIf="!svgData.svgData" (click)="onClickGenerateJson()">
+        <ion-icon name="caret-forward-outline"></ion-icon>
+        <ion-badge>Generar Json</ion-badge>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content>
+  <div class="menu-container" *ngIf="!svgData">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-lg="1" size="3" *ngFor="let item of images" (click)="init(item)">
+          <img src="assets/images/paint/paint{{item}}.svg" alt="">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="game-container noselect" *ngIf="svgData">
+    <div [style.width]="zoom + 'vmin'">
+      <svg x="0px" y="0px"
+        [attr.viewBox]="svgData.viewBox" 
+        [attr.enable-background]="svgData.enableBackground" #gameSvg>
+        <g *ngFor="let g of svgData.g" [attr.transform]="g.transform">
+          <path *ngFor="let path of g.paths" [attr.fill]="path.filled ? path.fill : '#ffffff'" 
+            [attr.stroke]="path.filled ? path.stroke : '#000000'" 
+            [attr.stroke-width]="path.filled ? path.strokeWidth : '1px'"  
+            [attr.style]="path.style"
+            [attr.transform]="path.transform"
+            [attr.self-closing]="path.selfClosing"
+            [attr.stroke-linecap]="path.strokeLinecap"
+            [attr.stroke-linejoin]="path.strokeLinejoin"
+            [attr.d]="path.d"
+            [attr.class]="(!path.filled && colorSelected && colorSelected.fill == path.colorGroup) ? 'animate-selected' : ''"
+            (mousedown)="onMouseDownPath($event, path)" 
+            (touchstart)="onMouseDownPath($event, path)" />
+        </g>
+      </svg>
+      <!-- <object type="image/svg+xml" [data]="svgUrl" #gameObject (load)="onLoadImage($event)">
+      </object> -->
+    </div>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border" *ngIf="svgData">
+  <ion-toolbar>
+    <div slot="end" style="width:100%; max-width: 300px;">
+      <ion-range min="50" max="400" color="secondary" [(ngModel)]="zoom">
+        <ion-icon size="small" slot="start"  name="remove-circle-outline"></ion-icon>
+        <ion-icon size="small" slot="end" name="add-circle-outline"></ion-icon>
+      </ion-range>
+    </div>
+  </ion-toolbar>
+</ion-footer>
