@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" *ngIf="!svgData">
       <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
     <ion-title>Pintar</ion-title>
@@ -10,7 +10,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-grid *ngIf="svgData">
+  <ion-grid *ngIf="svgData && colorSelected">
     <ion-row style="flex-wrap: nowrap;overflow: auto;">
       <ng-container *ngFor="let color of svgData.colors">
         <ion-col size="auto" *ngIf="color.count > 0" (click)="onClickColor(color)">
@@ -27,6 +27,7 @@
 </ion-header>
 
 <ion-content>
+  <app-fireworks *ngIf="fireworks"></app-fireworks>
   <div class="menu-container" *ngIf="!svgData">
     <ion-grid>
       <ion-row>
@@ -45,13 +46,13 @@
           <path *ngFor="let path of g.paths" [attr.fill]="path.filled ? path.fill : '#ffffff'" 
             [attr.stroke]="path.filled ? path.stroke : '#000000'" 
             [attr.stroke-width]="path.filled ? path.strokeWidth : '1px'"  
-            [attr.style]="path.style"
+            [attr.style]="sanitizer.bypassSecurityTrustStyle(path.style)"
             [attr.transform]="path.transform"
             [attr.self-closing]="path.selfClosing"
             [attr.stroke-linecap]="path.strokeLinecap"
             [attr.stroke-linejoin]="path.strokeLinejoin"
             [attr.d]="path.d"
-            [attr.class]="(!path.filled && colorSelected && colorSelected.fill == path.colorGroup) ? 'animate-selected' : ''"
+            [attr.class]="(!path.filled && colorSelected && colorSelected.id == path.colorGroup) ? 'animate-selected' : ''"
             (mousedown)="onMouseDownPath($event, path)" 
             (touchstart)="onMouseDownPath($event, path)" />
         </g>

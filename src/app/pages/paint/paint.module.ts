@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PaintPageRoutingModule } from './paint-routing.module';
 
 import { PaintPage } from './paint.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PaintPageRoutingModule
+    PaintPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [PaintPage]
 })

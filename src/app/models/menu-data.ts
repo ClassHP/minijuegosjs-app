@@ -55,4 +55,11 @@ export const MenuData = [
     descrip: 'Clasico juego de buscar palabras',
     href: '/wordsearch'
   },
+  {
+    category: 'Puzle',
+    title: 'Pintar',
+    image: 'assets/images/paint.png',
+    descrip: 'Juego de pintar',
+    href: '/paint'
+  },
 ]

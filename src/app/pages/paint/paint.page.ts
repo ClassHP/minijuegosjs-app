@@ -3,9 +3,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ColorsTools } from 'src/app/models/colors-tools';
 
 interface ISvgDataColor {
+  id: number;
   count: number, 
   fill: string, 
-  rgb: { r: number, g: number, b: number }, 
+  rgb?: number[], 
   countFilled: number
 }
 
@@ -19,7 +20,7 @@ interface ISvgDataPath {
   selfClosing?: string,
   strokeLinecap?: string,
   strokeLinejoin?: string,
-  colorGroup: string,
+  colorGroup?: number,
   filled: boolean
 }
 
@@ -46,27 +47,21 @@ export class PaintPage implements OnInit {
   images = [0, 1, 2, 3, 4, 5];
   svgData: ISvgData = null;
   image = 0;
-  colorSelected = null;
+  colorSelected: ISvgDataColor = null;
   zoom = 97;
-  //svgUrl;
-  //@ViewChild('gameObject') gameSvg: ElementRef;
+  fireworks = false;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
 
   init(item) {
     this.image = item; 
-    //this.svgUrl = this.sanitizer.bypassSecurityTrustResourceUrl('assets/images/paint/paint' + item +'.svg');
-    //console.log(this.svgUrl);
     const svg = require('./data/paint' + item + '.json');
 
     if(svg.svgData) {
       this.svgData = JSON.parse(JSON.stringify(svg))
-      this.svgData.colors = this.svgData.colors.sort((a, b) => {
-        return this.distanceRgb(a.rgb, b.rgb);
-      });
       this.colorSelected = this.svgData.colors[0];
     } else {
       this.svgData = {
@@ -104,11 +99,16 @@ export class PaintPage implements OnInit {
       }
       for(let g of groups) {
         g.paths = g.paths.map((obj) => {
-          let fill = obj['-fill'] || "#000000";
+          let fill = obj['-fill'];
           let style = obj['-style'];
           let stroke = obj['-stroke'];
           let strokeWidth = obj['-stroke-width'];
-          let color = { count: 0, fill: '', rgb: { r:0, g:0, b:0 }, countFilled: 0 };
+          let color: ISvgDataColor = { 
+            id: this.svgData.colors.length, 
+            count: 0, 
+            fill: '', 
+            countFilled: 0 
+          };
           
           if(fill && fill != 'none') {
             color.fill = fill;
@@ -121,21 +121,51 @@ export class PaintPage implements OnInit {
               color.fill = fill;
               style = style.replace(regex, '');
             }
-            style = this.sanitizer.bypassSecurityTrustStyle(style);
+            //style = this.sanitizer.bypassSecurityTrustStyle(style);
           }
           if(color.fill) {
-            let rgbArr = ColorsTools.hexToRgb(color.fill);
-            let rgb = { r: rgbArr[0], g: rgbArr[1], b: rgbArr[2] };
+            let rgb = ColorsTools.hexToRgb(color.fill);
 
             let colorFinded = this.svgData.colors.find(f => {
-              return Math.abs(this.distanceRgb(rgb, f.rgb)) < 10;
+              let aHsl = ColorsTools.rgbToHsv(rgb);
+              let bHsl = ColorsTools.rgbToHsv(f.rgb);
+              let newHsl = [ 
+                aHsl[0] + (bHsl[0] - aHsl[0]) / 2,
+                aHsl[1] + (bHsl[1] - aHsl[1]) / 2,
+                aHsl[2] + (bHsl[2] - aHsl[2]) / 2,
+              ];
+              if(Math.abs(bHsl[1] - aHsl[1]) < 10 &&
+                Math.abs(bHsl[2] - aHsl[2]) < 10 &&
+                ((newHsl[1] < 25 && newHsl[2] < 25)
+                  || newHsl[1] < 15 || newHsl[2] < 15
+                )
+              ) {
+                return true;
+              }
+              if(Math.abs(bHsl[0] - aHsl[0]) < 10 && 
+                Math.abs(bHsl[1] - aHsl[1]) < 10 &&
+                Math.abs(bHsl[2] - aHsl[2]) < 10
+              ) {
+                return true;
+              }
+              //return f.fill == color.fill;
+              //return Math.abs(this.distanceRgb(rgb, f.rgb)) < 10;
             });
 
             if(colorFinded == null) {
               color.rgb = rgb;
               this.svgData.colors.push(color);
             } else {
-              color = colorFinded;
+              color = colorFinded;              
+              let aHsl = ColorsTools.rgbToHsv(color.rgb);
+              let bHsl = ColorsTools.rgbToHsv(rgb);
+              let newHsl = [ 
+                aHsl[0] + (bHsl[0] - aHsl[0]) / 2,
+                aHsl[1] + (bHsl[1] - aHsl[1]) / 2,
+                aHsl[2] + (bHsl[2] - aHsl[2]) / 2,
+              ];
+              color.rgb = ColorsTools.hsvToRgb(newHsl);
+              color.fill = ColorsTools.rgbToHex(color.rgb);
             }
             color.count ++;
           }
@@ -149,7 +179,7 @@ export class PaintPage implements OnInit {
             transform: obj['-transform'],
             selfClosing: obj['-self-closing'],
             d: obj['-d'],
-            colorGroup: color.fill,
+            colorGroup: color.fill ? color.id : undefined,
             filled: !color.fill
           }
         });
@@ -162,22 +192,31 @@ export class PaintPage implements OnInit {
     }
   }
 
-  distanceRgb(a: {r: number, g: number, b: number}, b: {r: number, g: number, b: number}) {
-    let aHsl = ColorsTools.rgbToHsl([a.r, a.g, a.b]);
-    let bHsl = ColorsTools.rgbToHsl([b.r, b.g, b.b]);
-    let aLab = ColorsTools.rgbToLab([a.r, a.g, a.b]);
-    let bLab = ColorsTools.rgbToLab([b.r, b.g, b.b]);
+  indexColor(hsl: number[]) {
+    return parseInt('' + Math.floor(hsl[0]) + 
+      Math.floor(100 - hsl[1]).toString().padStart(3, '0') + 
+      Math.floor(100 - hsl[2]).toString().padStart(3, '0')
+    );
+  }
+
+  distanceRgb(a: number[], b: number[]) {
+    let aHsl = ColorsTools.rgbToHsv(a);
+    let bHsl = ColorsTools.rgbToHsv(b);
+    /*let aLab = ColorsTools.rgbToLab(a);
+    let bLab = ColorsTools.rgbToLab(b);
     let hDif = (bHsl[0] - aHsl[0]);
-    return ColorsTools.labDeltaE(aLab, bLab) * (hDif < 0 ? -1 : 1);
+    return ColorsTools.labDeltaE(aLab, bLab) * (hDif < 0 ? -1 : 1);*/
+    return this.indexColor(bHsl) - this.indexColor(aHsl);
   }
 
   clear() {
+    this.fireworks = false;
     this.svgData = null;
   }
 
   onMouseDownPath(event, path: ISvgDataPath) {
     if(this.svgData.svgData) {
-      if(this.colorSelected && path.colorGroup == this.colorSelected.fill && !path.filled) {
+      if(this.colorSelected && path.colorGroup == this.colorSelected.id && !path.filled) {
         path.filled = true;
         this.colorSelected.count --;
         this.colorSelected.countFilled ++;
@@ -186,12 +225,15 @@ export class PaintPage implements OnInit {
           this.colorSelected = this.svgData.colors.find((c, i) => c.count > 0 && i > index);
           if(!this.colorSelected) {
             this.colorSelected = this.svgData.colors.find((c, i) => c.count > 0);
+            if(!this.colorSelected) {
+              this.fireworks = true;
+            }
           }
         }
       }
     } else if (!path.filled) {
       path.filled = true;
-      this.colorSelected = this.svgData.colors.find((c) => c.fill == path.colorGroup);
+      this.colorSelected = this.svgData.colors.find((c) => c.id == path.colorGroup);
       this.colorSelected.count --;
       this.colorSelected.countFilled ++;
     }
@@ -209,7 +251,7 @@ export class PaintPage implements OnInit {
     if(this.svgData) {
       for(let g of this.svgData.g){
         for(let path of g.paths) {
-          if(path.filled == true && path.colorGroup) {
+          if(path.filled == true && path.colorGroup != undefined) {
             path.filled = null;
           } else {
             path.filled = true;
@@ -221,6 +263,7 @@ export class PaintPage implements OnInit {
         if(color.countFilled > 0) {
           color.count = color.countFilled;
           color.countFilled = 0;
+          color.rgb = undefined;
           colors.push(color);
         } 
       }
