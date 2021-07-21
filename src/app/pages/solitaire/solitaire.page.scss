@@ -1,0 +1,22 @@
+ion-grid {
+  max-width: 120vh;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  .card {
+    height: 6vh;
+  }
+}
+.selected-top {
+  -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.44); 
+  box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.44);
+}
+.selected {
+  margin: 5px -5px -5px 5px;
+}
+
+.drag {
+  position: absolute;
+  cursor: move;
+}

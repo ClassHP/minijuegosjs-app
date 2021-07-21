@@ -30,7 +30,8 @@ const routes: Routes = [
   {
     path: 'infinite1',
     loadChildren: () => import('./pages/infinite1/infinite1.module').then( m => m.Infinite1PageModule)
-  },  {
+  },
+  {
     path: 'crosswords',
     loadChildren: () => import('./pages/crosswords/crosswords.module').then( m => m.CrosswordsPageModule)
   },
@@ -45,6 +46,10 @@ const routes: Routes = [
   {
     path: 'paint',
     loadChildren: () => import('./pages/paint/paint.module').then( m => m.PaintPageModule)
+  },
+  {
+    path: 'freecell',
+    loadChildren: () => import('./pages/solitaire/solitaire.module').then( m => m.SolitairePageModule)
   }
 
 ];
