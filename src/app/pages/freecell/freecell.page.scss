@@ -8,6 +8,17 @@ ion-grid {
     height: 6vmin;
   }
 }
+.selected-top {
+  -webkit-box-shadow: 1vmin 1vmin 1.5vmin 1vmin rgba(0,0,0,0.44); 
+  box-shadow: 1vmin 1vmin 1.5vmin 1vmin rgba(0,0,0,0.44);
+}
+.selected {
+  margin: 0.5vmin -0.5vmin -0.5vmin 0.5vmin;
+}
+.drag {
+  position: absolute;
+  cursor: move;
+}
 .column-8, .column-9 {
   .card {
     height: 5vmin;
@@ -32,15 +43,4 @@ ion-grid {
   .card {
     height: 1vmin;
   }
-}
-.selected-top {
-  -webkit-box-shadow: 1vmin 1vmin 1.5vmin 1vmin rgba(0,0,0,0.44); 
-  box-shadow: 1vmin 1vmin 1.5vmin 1vmin rgba(0,0,0,0.44);
-}
-.selected {
-  margin: 0.5vmin -0.5vmin -0.5vmin 0.5vmin;
-}
-.drag {
-  position: absolute;
-  cursor: move;
 }

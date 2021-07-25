@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Carta Blanca</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="init()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <app-fireworks *ngIf="endgame"></app-fireworks>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let card of game.transition; let i = index" 
+        (click)="onClickTransition(i)">
+        <img *ngIf="card" src="assets/images/img_cards/{{card}}.svg" alt="card" [draggable]="true"
+          [class.selected]="isSelected(card)" 
+          [class.selected-top]="isSelectedTop(card)"
+          (drag)="onDragCard2($event, card, -1, i)">
+        <img *ngIf="!card" src="assets/images/img_cards/2J.svg" alt="card" [draggable]="false"
+          (dragover)="onDragOverCard2($event, '00', -1, i)"
+          (drop)="onDropCard2($event, '00', -1, i)">
+      </ion-col>
+      <ion-col *ngFor="let card of game.end; let i = index"
+        (click)="onClickEnd(i)"
+        (dragover)="onDragOverCard2($event, 'ZZ', -1 , i)"
+        (drop)="onDropCard2($event, 'ZZ', -1, i)">
+        <img *ngIf="card && card.length > 0" src="assets/images/img_cards/{{card[0]}}.svg" alt="card" [draggable]="false" >
+        <img *ngIf="!card || card.length == 0" src="assets/images/img_cards/1J.svg" alt="card" [draggable]="false" >
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngFor="let column of game.columns; let icol = index">
+        <div class="column column-{{ column.length }}">
+          <div *ngIf="column.length == 0" class="card">
+            <img src="assets/images/img_cards/2J.svg" alt="card" 
+              (mousedown)="onClickCard($event, 'XX', icol, -1)"
+              (dragover)="onDragOverCard2($event, 'XX', icol, -1)"
+              (drop)="onDropCard2($event, 'XX', icol, -1)" [draggable]="false">
+          </div>
+          <div *ngFor="let card of column; let icard = index" class="card" >
+            <img src="assets/images/img_cards/{{card}}.svg" alt="card" 
+              [class.selected]="isSelected(card)" 
+              [class.selected-top]="isSelectedTop(card)"
+              (mousedown)="onClickCard($event, card, icol, icard)"
+              (dragstart)="onDragCard2($event, card, icol, icard)"
+              (dragover)="onDragOverCard2($event, card, icol, icard)"
+              (drop)="onDropCard2($event, card, icol, icard)"
+              [draggable]="isSelected(card)">
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

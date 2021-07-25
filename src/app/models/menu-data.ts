@@ -1,8 +1,15 @@
 export const MenuData = [
   {
     category: 'Cartas',
-    title: 'Carta Blanca',
+    title: 'Solitario',
     image: 'assets/images/solitaire.png',
+    descrip: 'Juego de cartas de un solo jugador',
+    href: '/solitaire'
+  },
+  {
+    category: 'Cartas',
+    title: 'Carta Blanca',
+    image: 'assets/images/freecell.png',
     descrip: 'Juego de cartas de un solo jugador',
     href: '/freecell'
   },

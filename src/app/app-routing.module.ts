@@ -49,6 +49,10 @@ const routes: Routes = [
   },
   {
     path: 'freecell',
+    loadChildren: () => import('./pages/freecell/freecell.module').then( m => m.FreecellPageModule)
+  },
+  {
+    path: 'solitaire',
     loadChildren: () => import('./pages/solitaire/solitaire.module').then( m => m.SolitairePageModule)
   }
 

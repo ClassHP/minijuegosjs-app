@@ -10,10 +10,9 @@ export class SolitairePage implements OnInit {
   private readonly type = ['H', 'S', 'D', 'C'];
   private readonly numb = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
   cards: string[] = [];
-  game: { columns: string[][], end: string[][], transition: string[] }
+  game: { columns: string[][], end: string[][], transition: string[], transition2: string[], visibles: any; }
   selected: { card: string, icol: number, icard: number }[] = [];
   drag: { top: string, left: string, offsetX: number, offsetY: number } = null;
-  selectedDrag: { card: string, icol: number, icard: number };
   endgame = false;
 
   constructor() { 
@@ -27,20 +26,25 @@ export class SolitairePage implements OnInit {
   init() {
     this.endgame = false;
     this.game = { 
-      columns: new Array<string[]>(8).fill([]).map(() => new Array()),
+      columns: new Array<string[]>(7).fill([]).map(() => new Array()),
       end: new Array<string[]>(4).fill([]).map(() => new Array()),
-      transition: new Array<string>(4)
+      transition: [],
+      transition2: [], 
+      visibles: {}
     }
     let cards = [...this.cards];
-    let length = cards.length;
-    let counts = [7, 7, 7, 7, 6, 6, 6, 6];
-    let col = 0;
-    for(let i=0; i < length; i++) {
-      this.game.columns[col].push(this.getRandomCard(cards));
+    let counts = [1, 2, 3, 4, 5, 6, 7];
+    for(let col = 0; col < counts.length;) {
+      let card = this.getRandomCard(cards);
+      this.game.columns[col].push(card);
       counts[col] --;
       if(counts[col] == 0) {
+        this.game.visibles[card] = true;
         col ++;
       }
+    }
+    while(cards.length > 0) {
+      this.game.transition.push(this.getRandomCard(cards));
     }
   }
 
@@ -65,7 +69,7 @@ export class SolitairePage implements OnInit {
     let type1 = this.type.indexOf(card1[1]);
     let numb2 = this.numb.indexOf(card2[0]);
     let type2 = this.type.indexOf(card2[1]);
-    return (numb1 == numb2 + 1 && type1 % 2  != type2 % 2) || card1 == 'XX';
+    return (numb1 == numb2 + 1 && type1 % 2  != type2 % 2) || (card1 == 'XX' && numb2 == 12);
   }
 
   isValidMoveEnd(card1, card2) {
@@ -77,77 +81,89 @@ export class SolitairePage implements OnInit {
   }
 
   validateEndGame() {
-    if(!this.game.columns.find(c => c.length > 0) && !this.game.transition.find(t => !!t)) {
+    if(!this.game.end.find(c => c.length < 13)) {
       this.endgame = true;
     }
   }
 
-  onClickCard($event, card, icol, icard) {
-    if(this.selected.length == 1) {
-      if(card != this.selected[0].card) {
-        if(this.isValidMove(card, this.selected[0].card)) {
-          if(this.selected[0].icol >= 0) {
-            this.game.columns[this.selected[0].icol].splice(this.selected[0].icard, 1);
-          } else {
-            this.game.transition[this.selected[0].icard] = null;
-          }
-          this.game.columns[icol].push(this.selected[0].card);
-          this.selected = [];
-          return;
-        }
-      }
-    }
-    if(this.game.columns[icol].length == icard + 1) {
-      if(this.selected.length == 0 || card != this.selected[0].card) {
-        this.selected = [];
-        this.selected.push({ card, icol, icard });
-        return;
-      }
+  onDragstartCard($event, card, icol, icard) {
+    if($event) {
+      $event.dataTransfer.setData("card", card);
     }
     this.selected = [];
+    if(icol >= 0) {
+      for(; icard < this.game.columns[icol].length; icard++) {
+        this.selected.push({ card: this.game.columns[icol][icard], icol, icard });
+      }
+    } else {
+      this.selected.push({ card, icol, icard });
+    }
   }
 
-  onDragCard2($event, card, icol, icard) {
-    this.selectedDrag = { card, icol, icard };
-    $event.dataTransfer.setData("card", card);
+  onDragendCard() {
     this.selected = [];
   }
   
-  onDragOverCard2($event, card, icol, icard) {
-    let data = this.selectedDrag;
-    if(data && data.card != card) {
+  onDragoverCard($event, card, icol, icard) {
+    let data = this.selected[0];
+    if(data && data.icol != icol) {
       if(icol >= 0 && icard == this.game.columns[icol].length - 1 && this.isValidMove(card, data.card)) {
         $event.preventDefault();
       }
-      if(card == 'ZZ' && this.isValidMoveEnd(this.game.end[icard][0] || 'ZZ', data.card)) {
+      if(this.selected.length == 1 && card == 'ZZ' 
+        && this.isValidMoveEnd(this.game.end[icard][0] || 'ZZ', data.card)) {
         $event.preventDefault();
       }
-      if(card == '00') {
-        $event.preventDefault();
-      } 
     }
   }
   
-  onDropCard2($event, card, icol, icard) {
-    let data = this.selectedDrag;
+  onDropCard($event, card, icol, icard) {
+    let data = this.selected[0];
     if(data) {
       if(data.icol >= 0) {
-        this.game.columns[data.icol].splice(data.icard, 1);
-      } else {
-        this.game.transition[data.icard] = null;
+        let col = this.game.columns[data.icol];
+        col.splice(data.icard, this.selected.length);
+        if(col.length > 0) {
+          this.game.visibles[(col[col.length - 1])] = true;
+        }
+      } else if(data.icol == -2) {
+        this.game.transition2.shift();
+        this.game.visibles[data.card] = true;
+      } else if(data.icol == -1) {
+        this.game.end[data.icard].shift();
       }
       if(icol >= 0) {        
-        this.game.columns[icol].push(data.card);
+        this.game.columns[icol].push(...this.selected.map(m => m.card));
       } else {
-        if(card == '00') {
-          this.game.transition[icard] = data.card;
-        }
         if(card == 'ZZ') {
           this.game.end[icard].unshift(data.card);
           this.validateEndGame();
         }
       }
     }
+    this.selected = [];
+  }
+
+  onClickCard($event, card, icol, icard) {
+    if(this.selected.length == 0 && (this.game.visibles[card] || icol < 0)) {
+      this.onDragstartCard(null, card, icol, icard);
+      return;
+    }
+    let data = this.selected[0];
+    if(data && data.icol != icol) {
+      if((icol >= 0 && icard == this.game.columns[icol].length - 1 && this.isValidMove(card, data.card))
+        || (this.selected.length == 1 && card == 'ZZ' 
+          && this.isValidMoveEnd(this.game.end[icard][0] || 'ZZ', data.card))
+      ) {
+        this.onDropCard($event, card, icol, icard);
+        return;
+      }
+    }    
+    this.selected = [];
+  }
+
+  isDragable(card) {
+    return this.game.visibles[card];
   }
 
   isSelected(card: string) {
@@ -155,37 +171,15 @@ export class SolitairePage implements OnInit {
   }
 
   isSelectedTop(card) {
-    return this.selected.length > 0 && this.selected[this.selected.length - 1].card == card
+    return this.selected.length > 0 && this.selected[0].card == card
   }
 
-  onClickTransition(i) {
-    if(this.game.transition[i]) {
-      if(this.selected.length > 0) {
-        this.selected = [];
-      }
-      this.selected.push({ card: this.game.transition[i], icol: -1, icard: i });
+  onClickTransition1() {
+    if(this.game.transition.length > 0) {
+      this.game.transition2.unshift(this.game.transition.pop());
     } else {
-      if(this.selected.length == 1 && this.selected[0].icol >= 0) {
-        this.game.transition[i] = this.selected[0].card;
-        this.game.columns[this.selected[0].icol].splice(this.selected[0].icard, 1);
-        this.selected = [];
-      }
-    }
-  }
-
-  onClickEnd(i) {
-    if(this.selected.length == 1) {
-      let top = this.game.end[i][0] || 'ZZ';
-      if(this.isValidMoveEnd(top, this.selected[0].card)) {
-        if(this.selected[0].icol >= 0) {
-          this.game.columns[this.selected[0].icol].splice(this.selected[0].icard, 1);
-        } else {
-          this.game.transition[this.selected[0].icard] = null;
-        }
-        this.game.end[i].unshift(this.selected[0].card);
-        this.selected = [];
-        this.validateEndGame();
-      }
+      this.game.transition = this.game.transition2;
+      this.game.transition2 = [];
     }
   }
 
