@@ -110,8 +110,8 @@ export class SolitairePage implements OnInit {
       if(icol >= 0 && icard == this.game.columns[icol].length - 1 && this.isValidMove(card, data.card)) {
         $event.preventDefault();
       }
-      if(this.selected.length == 1 && card == 'ZZ' 
-        && this.isValidMoveEnd(this.game.end[icard][0] || 'ZZ', data.card)) {
+      if(this.selected.length == 1 && icol == -1 
+        && this.isValidMoveEnd(card, data.card)) {
         $event.preventDefault();
       }
     }
@@ -134,11 +134,9 @@ export class SolitairePage implements OnInit {
       }
       if(icol >= 0) {        
         this.game.columns[icol].push(...this.selected.map(m => m.card));
-      } else {
-        if(card == 'ZZ') {
-          this.game.end[icard].unshift(data.card);
-          this.validateEndGame();
-        }
+      } else if(icol == -1) {
+        this.game.end[icard].unshift(data.card);
+        this.validateEndGame();
       }
     }
     this.selected = [];
@@ -152,7 +150,7 @@ export class SolitairePage implements OnInit {
     let data = this.selected[0];
     if(data && data.icol != icol) {
       if((icol >= 0 && icard == this.game.columns[icol].length - 1 && this.isValidMove(card, data.card))
-        || (this.selected.length == 1 && card == 'ZZ' 
+        || (this.selected.length == 1 && icol < 0 
           && this.isValidMoveEnd(this.game.end[icard][0] || 'ZZ', data.card))
       ) {
         this.onDropCard($event, card, icol, icard);

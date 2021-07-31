@@ -34,13 +34,13 @@
       <ion-col *ngFor="let card of game.end; let i = index">
         <img *ngIf="card && card.length > 0" src="assets/images/img_cards/{{card[0]}}.svg" alt="card" 
           [draggable]="true"
-          [class.selected]="isSelected(card)" 
-          [class.selected-top]="isSelectedTop(card)" 
+          [class.selected]="isSelected(card[0])" 
+          [class.selected-top]="isSelectedTop(card[0])" 
           (dragstart)="onDragstartCard($event, card[0], -1, i)"
           (dragend)="onDragendCard()"
-          (dragover)="onDragoverCard($event, 'ZZ', -1 , i)"
-          (drop)="onDropCard($event, 'ZZ', -1, i)"
-          (click)="onClickCard($event, 'ZZ', -1, i)" >
+          (dragover)="onDragoverCard($event, card[0], -1 , i)"
+          (drop)="onDropCard($event, card[0], -1, i)"
+          (click)="onClickCard($event, card[0], -1, i)" >
         <img *ngIf="!card || card.length == 0" src="assets/images/img_cards/1J.svg" alt="card" [draggable]="false"
           (dragover)="onDragoverCard($event, 'ZZ', -1 , i)"
           (drop)="onDropCard($event, 'ZZ', -1, i)"
