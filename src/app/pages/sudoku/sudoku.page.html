@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sudoku</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="init()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content (window:keydown)="onKeydown($event)">
+  <app-fireworks *ngIf="endgame"></app-fireworks>
+  <table *ngIf="sudoku" class="sudoku" [class.showerror]="showerror" >
+    <tr *ngFor="let row of sudoku.cells; let r = index">
+      <td *ngFor="let col of row; let c = index" [class.lock]="col.lock" 
+        class="row-{{r}} col-{{c}} val-{{col.solution}}"
+        [class.error]="col.value > 0 && col.solution != col.value" 
+        (click)="onClickCell(r, c, col.value)" 
+        [class.selected]="selected.row == r && selected.col == c" 
+        [class.highlight]="selected.value == col.value && col.value > 0">
+        <span *ngIf="!col.notes">{{ col.value > 0 ? col.value : ''}}</span>
+        <div *ngIf="col.notes" class="notes">
+          <div *ngFor="let note of col.notes; let n = index">
+            {{ note ? n + 1 : '' }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <table class="keyboard" *ngIf="sudoku && !endgame">
+    <tr>
+      <td *ngFor="let item of [1, 2, 3, 4, 5, 6]">
+        <ion-button (click)="onClickKeyboard(item)">{{item}}</ion-button>
+      </td>
+    </tr>
+    <tr>
+      <td *ngFor="let item of [7, 8, 9]">
+        <ion-button (click)="onClickKeyboard(item)">{{item}}</ion-button>
+      </td>
+      <td>
+        <ion-button (click)="onClickKeyboard(0)" style="--padding-start: 7px;--padding-end: 7px;">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </td>
+      <td>
+        <ion-button (click)="onClickPensil()" [color]="enableNote ? 'secondary' : 'medium'"
+          style="--padding-start: 7px;--padding-end: 7px;">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-button>
+      </td>
+      <td>
+        <!--<ion-button (click)="fillNotes(sudoku, 1)" style="--padding-start: 7px;--padding-end: 7px;">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-button>-->
+      </td>
+    </tr>
+  </table>
+</ion-content>

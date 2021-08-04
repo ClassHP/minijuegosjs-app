@@ -54,7 +54,11 @@ const routes: Routes = [
   {
     path: 'solitaire',
     loadChildren: () => import('./pages/solitaire/solitaire.module').then( m => m.SolitairePageModule)
+  },  {
+    path: 'sudoku',
+    loadChildren: () => import('./pages/sudoku/sudoku.module').then( m => m.SudokuPageModule)
   }
+
 
 ];
 

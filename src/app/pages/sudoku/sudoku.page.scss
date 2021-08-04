@@ -1,0 +1,50 @@
+.sudoku {
+  background-color: white;
+  color: black;
+  margin: 15px auto;
+  user-select: none;
+  td {
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    border: 2px dashed var(--ion-color-medium);
+    user-select: none;
+  }
+  .row-0 {
+    border-top: 4px solid var(--ion-color-medium);
+  }
+  .row-2, .row-5, .row-8 {
+    border-bottom: 4px solid var(--ion-color-medium);
+  }
+  .col-0 {
+    border-left: 4px solid var(--ion-color-medium);
+  }
+  .col-2, .col-5, .col-8 {
+    border-right: 4px solid var(--ion-color-medium);
+  }
+  .highlight {
+    background-color: var(--ion-color-secondary-tint)
+  }
+  .selected {
+    background-color: var(--ion-color-primary-tint)
+  }
+  .lock {
+    font-weight: bold;
+  }
+  .notes {
+    display: flex;
+    font-size: 10px;
+    flex-wrap: wrap;
+    div {
+      width: 33%;
+      height: 2ex;
+    }
+  }
+  .showerror .error {
+    color: var(--ion-color-danger);
+  }
+}
+.keyboard {
+  margin: 15px auto;
+  user-select: none;
+}

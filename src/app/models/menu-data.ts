@@ -1,5 +1,12 @@
 export const MenuData = [
   {
+    category: 'Puzle',
+    title: 'Sudoku',
+    image: 'assets/images/sudoku.png',
+    descrip: 'Juego de numeros',
+    href: '/sudoku'
+  },
+  {
     category: 'Cartas',
     title: 'Solitario',
     image: 'assets/images/solitaire.png',
