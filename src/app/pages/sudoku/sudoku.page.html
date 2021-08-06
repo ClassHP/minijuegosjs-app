@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
-    <ion-title>Sudoku</ion-title>
+    <ion-title (click)="cheatOn()">Sudoku</ion-title>
     <ion-buttons slot="end">
       <ion-button color="primary" (click)="init()">
         <ion-icon name="refresh-outline"></ion-icon>
@@ -53,9 +53,9 @@
         </ion-button>
       </td>
       <td>
-        <!--<ion-button (click)="fillNotes(sudoku, 1)" style="--padding-start: 7px;--padding-end: 7px;">
+        <ion-button *ngIf="cheat > 10" (click)="fillNotes(sudoku, cheat > 12 ? 3 : 1)" style="--padding-start: 7px;--padding-end: 7px;">
           <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-        </ion-button>-->
+        </ion-button>
       </td>
     </tr>
   </table>

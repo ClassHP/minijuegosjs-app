@@ -34,6 +34,7 @@ export class SudokuPage implements OnInit {
   public showerror = false;
   public endgame = false;
   private id: string;
+  public cheat = 0;
   
   constructor(
     private alertController: AlertController,
@@ -251,7 +252,7 @@ export class SudokuPage implements OnInit {
         let block = this.getBlockIndex(row, col);
         let value = parseInt(id[index], 10) - 1;
         index++;
-        if(value > 0) {
+        if(value >= 0) {
           rows[row][value] = cols[col][value] = blocks[block][value] = true;
         }
         cells[row][col] = { row, col, block, value: value + 1, solution: value + 1, lock: value != -1 };
@@ -259,7 +260,20 @@ export class SudokuPage implements OnInit {
         cellsBlocks[block].push(cells[row][col]);
       }
     }
-    return { cells: cells, marks: { rows, cols, blocks }, cols: cellsCols, blocks: cellsBlocks };
+    let sudoku = { cells: cells, marks: { rows, cols, blocks }, cols: cellsCols, blocks: cellsBlocks };
+    
+    this.fillNotes(sudoku, 3);
+    this.forEachSudoku(sudoku, (row, rowi, col, coli, blocki) => {
+      if(col.notes) {
+        let notes = col.notes.filter(v => v);
+        if(notes.length == 1) {
+          col.solution = col.notes.indexOf(true) + 1;
+        }
+      }
+      col.notes = null;
+    });
+    
+    return sudoku;
   }
 
   getRandomSudoku() : Sudoku {
@@ -394,6 +408,10 @@ export class SudokuPage implements OnInit {
 
     await alert.present();
     await alert.onDidDismiss();
+  }
+
+  cheatOn() {
+    this.cheat ++;
   }
 
 }
