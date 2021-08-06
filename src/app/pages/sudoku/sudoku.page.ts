@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 interface SudokuCell {
   row: number;
@@ -16,6 +18,7 @@ interface Sudoku {
   marks: { rows: boolean[][], cols: boolean[][], blocks: boolean[][] };
   cols: SudokuCell[][];
   blocks: SudokuCell[][];
+  id?: string;
 }
 
 @Component({
@@ -30,8 +33,18 @@ export class SudokuPage implements OnInit {
   private difficulty = 2;
   public showerror = false;
   public endgame = false;
+  private id: string;
   
-  constructor(public alertController: AlertController) { }
+  constructor(
+    private alertController: AlertController,
+    private route: ActivatedRoute,
+    private location: Location,
+    private router: Router
+  ) { 
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+    });
+  }
 
   ngOnInit() {
     this.init();
@@ -42,9 +55,15 @@ export class SudokuPage implements OnInit {
     this.enableNote = false;
     this.showerror = false;
     this.endgame = false;
-    this.presentAlertRadioDifficulty().then(() => {
-      this.sudoku = this.getSudoku(this.difficulty);
-    });
+    if(!this.id) {
+      this.presentAlertRadioDifficulty().then(() => {
+        this.sudoku = this.getSudoku(this.difficulty);
+        this.location.replaceState(this.router.createUrlTree(['sudoku/' + this.sudoku.id]).toString());
+      });
+    } else {
+      this.sudoku = this.getSudokuById(this.id);
+      this.id = null;
+    }
   }
 
   getSudoku(difficulty: number) : Sudoku {
@@ -82,9 +101,11 @@ export class SudokuPage implements OnInit {
         }
       }
     } while (availables.length > 0 && (count < 50 || difficulty > 2));
+    sudoku.id = '';
     this.forEachSudoku(sudoku, (row, rowi, col, coli, blocki) => {
       col.notes = null;
       col.lock = col.value != 0;
+      sudoku.id += col.value.toString();
     });
     //this.fillNotes(sudoku, 3, false);
     console.log(count);
@@ -215,6 +236,30 @@ export class SudokuPage implements OnInit {
       sudoku = this.getRandomSudoku();
     } while(sudoku == null);
     return sudoku;
+  }
+
+  getSudokuById(id: string) : Sudoku {
+    let cells = new Array<SudokuCell[]>(9).fill([]).map(() => new Array<SudokuCell>(9));
+    let cellsCols = new Array<SudokuCell[]>(9).fill([]).map(() => new Array<SudokuCell>(9));
+    let cellsBlocks = new Array<SudokuCell[]>(9).fill([]).map(() => new Array<SudokuCell>());
+    let rows = new Array<boolean[]>(9).fill([]).map(() => new Array<boolean>(9).fill(false));
+    let cols = new Array<boolean[]>(9).fill([]).map(() => new Array<boolean>(9).fill(false));
+    let blocks = new Array<boolean[]>(9).fill([]).map(() => new Array<boolean>(9).fill(false));
+    let index = 0;
+    for(let row = 0; row < cells.length; row++) {
+      for(let col = 0; col < cells[row].length; col++) {
+        let block = this.getBlockIndex(row, col);
+        let value = parseInt(id[index], 10) - 1;
+        index++;
+        if(value > 0) {
+          rows[row][value] = cols[col][value] = blocks[block][value] = true;
+        }
+        cells[row][col] = { row, col, block, value: value + 1, solution: value + 1, lock: value != -1 };
+        cellsCols[col][row] = cells[row][col];
+        cellsBlocks[block].push(cells[row][col]);
+      }
+    }
+    return { cells: cells, marks: { rows, cols, blocks }, cols: cellsCols, blocks: cellsBlocks };
   }
 
   getRandomSudoku() : Sudoku {
